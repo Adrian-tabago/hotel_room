@@ -1,4 +1,3 @@
-
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
@@ -8,7 +7,6 @@ const { User, Room, Guest } = require("./schema");
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("."));
@@ -19,7 +17,6 @@ app.use(session({
     saveUninitialized: false
 }));
 
-// Connect to MongoDB and start the server.
 async function startServer() {
     try {
         await mongoose.connect("mongodb://127.0.0.1:27017/hotel_user");
@@ -36,28 +33,31 @@ async function startServer() {
 
 startServer();
 
-// REGISTER
 app.post("/users", async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { name, email, password } = req.body;
 
-        // Check if inputs are empty.
-        if (!email || !password || !email.trim() || !password.trim()) {
+        if (
+            !name || !name.trim() ||
+            !email || !email.trim() ||
+            !password || !password.trim()
+        ) {
             return res.status(400).json({
-                message: "Invalid input"
+                message: "Name, email, and password are required"
             });
         }
 
-        // Check email format.
+        const cleanName = name.trim();
+        const cleanEmail = email.trim().toLowerCase();
+
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!emailPattern.test(email.trim())) {
+        if (!emailPattern.test(cleanEmail)) {
             return res.status(400).json({
                 message: "Invalid email"
             });
         }
 
-        // Check password requirements.
         if (
             password.length < 8 ||
             !/[A-Za-z]/.test(password) ||
@@ -69,9 +69,8 @@ app.post("/users", async (req, res) => {
             });
         }
 
-        // Check if email already exists.
         const existingUser = await User.findOne({
-            email: email.trim().toLowerCase()
+            email: cleanEmail
         });
 
         if (existingUser) {
@@ -80,12 +79,11 @@ app.post("/users", async (req, res) => {
             });
         }
 
-        // Hash the password.
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Save the user.
         const user = await User.create({
-            email: email.trim().toLowerCase(),
+            name: cleanName,
+            email: cleanEmail,
             password: hashedPassword
         });
 
@@ -93,6 +91,7 @@ app.post("/users", async (req, res) => {
             message: "User registered successfully",
             user: {
                 id: user._id,
+                name: user.name,
                 email: user.email
             }
         });
@@ -106,7 +105,6 @@ app.post("/users", async (req, res) => {
     }
 });
 
-// LOGIN
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -117,7 +115,6 @@ app.post("/login", async (req, res) => {
             });
         }
 
-        // Find the user by email.
         const user = await User.findOne({
             email: email.trim().toLowerCase()
         });
@@ -128,7 +125,6 @@ app.post("/login", async (req, res) => {
             });
         }
 
-        // Compare the password with the hashed password.
         const passwordMatch = await bcrypt.compare(
             password,
             user.password
@@ -140,7 +136,6 @@ app.post("/login", async (req, res) => {
             });
         }
 
-        // Save the user's ID in the session.
         req.session.userId = user._id.toString();
 
         res.json({
@@ -156,30 +151,73 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/addrooms", async (req, res) => {
+app.get("/me", async (req, res) => {
     try {
-        // Stop if rooms already exist
-        const count = await Room.countDocuments();
-        if (count > 0) {
-            return res.status(400).json({ message: "Rooms already exist!" });
+        
+        if (!req.session.userId) {
+            return res.status(401).json({
+                message: "Please log in first"
+            });
+        }
+    
+        const user = await User.findById(req.session.userId)
+            .select("name email");
+
+        
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
         }
 
-       const rooms = [
-    { roomNumber: "101", roomType: "Standard", floor: 1, status: "Available", feature: "Queen bed", guests: 2, rate: 1800 },
-    { roomNumber: "102", roomType: "Standard", floor: 1, status: "Available", feature: "Queen bed", guests: 2, rate: 1800 },
-    { roomNumber: "103", roomType: "Standard", floor: 1, status: "Available", feature: "Twin beds", guests: 2, rate: 1800 },
-    { roomNumber: "104", roomType: "Standard", floor: 1, status: "Available", feature: "Queen bed", guests: 2, rate: 1800 },
+       
+        if (!user.name || !user.email) {
+            return res.status(400).json({
+                message: "User name or email is missing"
+            });
+        }
 
-    { roomNumber: "201", roomType: "Deluxe", floor: 2, status: "Available", feature: "King bed", guests: 2, rate: 2800 },
-    { roomNumber: "202", roomType: "Deluxe", floor: 2, status: "Available", feature: "King bed", guests: 2, rate: 2800 },
-    { roomNumber: "203", roomType: "Deluxe", floor: 2, status: "Available", feature: "Twin beds", guests: 3, rate: 2800 },
-    { roomNumber: "204", roomType: "Deluxe", floor: 2, status: "Available", feature: "King bed", guests: 2, rate: 2800 },
+        
+        return res.status(200).json({
+            name: user.name,
+            email: user.email
+        });
 
-    { roomNumber: "301", roomType: "Suite", floor: 3, status: "Available", feature: "King bed and living area", guests: 4, rate: 4500 },
-    { roomNumber: "302", roomType: "Suite", floor: 3, status: "Available", feature: "King bed and living area", guests: 4, rate: 4500 },
-    { roomNumber: "303", roomType: "Suite", floor: 3, status: "Available", feature: "Two queen beds", guests: 4, rate: 4500 },
-    { roomNumber: "304", roomType: "Suite", floor: 3, status: "Available", feature: "King bed and living area", guests: 4, rate: 4500 }
-];
+    } catch (error) {
+        console.error("Error fetching user:", error);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+});
+
+app.post("/addrooms", async (req, res) => {
+    try {
+        const count = await Room.countDocuments();
+
+        if (count > 0) {
+            return res.status(400).json({
+                message: "Rooms already exist!"
+            });
+        }
+
+        const rooms = [
+            { roomNumber: "101", roomType: "Standard", floor: 1, status: "Available", feature: "Queen bed", guests: 2, rate: 1800 },
+            { roomNumber: "102", roomType: "Standard", floor: 1, status: "Available", feature: "Queen bed", guests: 2, rate: 1800 },
+            { roomNumber: "103", roomType: "Standard", floor: 1, status: "Available", feature: "Twin beds", guests: 2, rate: 1800 },
+            { roomNumber: "104", roomType: "Standard", floor: 1, status: "Available", feature: "Queen bed", guests: 2, rate: 1800 },
+
+            { roomNumber: "201", roomType: "Deluxe", floor: 2, status: "Available", feature: "King bed", guests: 2, rate: 2800 },
+            { roomNumber: "202", roomType: "Deluxe", floor: 2, status: "Available", feature: "King bed", guests: 2, rate: 2800 },
+            { roomNumber: "203", roomType: "Deluxe", floor: 2, status: "Available", feature: "Twin beds", guests: 3, rate: 2800 },
+            { roomNumber: "204", roomType: "Deluxe", floor: 2, status: "Available", feature: "King bed", guests: 2, rate: 2800 },
+
+            { roomNumber: "301", roomType: "Suite", floor: 3, status: "Available", feature: "King bed and living area", guests: 4, rate: 4500 },
+            { roomNumber: "302", roomType: "Suite", floor: 3, status: "Available", feature: "King bed and living area", guests: 4, rate: 4500 },
+            { roomNumber: "303", roomType: "Suite", floor: 3, status: "Available", feature: "Two queen beds", guests: 4, rate: 4500 },
+            { roomNumber: "304", roomType: "Suite", floor: 3, status: "Available", feature: "King bed and living area", guests: 4, rate: 4500 }
+        ];
 
         const addedroom = await Room.insertMany(rooms);
 
@@ -187,8 +225,12 @@ app.post("/addrooms", async (req, res) => {
             message: "Rooms saved successfully!",
             total: addedroom.length
         });
+
     } catch (err) {
-        res.status(500).json({ message: "Error adding rooms", error: err.message });
+        res.status(500).json({
+            message: "Error adding rooms",
+            error: err.message
+        });
     }
 });
 
@@ -196,12 +238,15 @@ app.get("/rooms", async (req, res) => {
     try {
         const rooms = await Room.find();
         res.json(rooms);
+
     } catch (err) {
-        res.status(500).json({ message: "Error fetching rooms", error: err.message });
+        res.status(500).json({
+            message: "Error fetching rooms",
+            error: err.message
+        });
     }
 });
 
-// RENT ROOM
 app.post("/rentroom", async (req, res) => {
     try {
         if (!req.session.userId) {
@@ -220,7 +265,6 @@ app.post("/rentroom", async (req, res) => {
             specialRequests
         } = req.body;
 
-        // Get the logged-in user.
         const user = await User.findById(req.session.userId);
 
         if (!user) {
@@ -229,7 +273,6 @@ app.post("/rentroom", async (req, res) => {
             });
         }
 
-        // Find the selected room.
         const room = await Room.findOne({
             roomNumber: roomNumber
         });
@@ -246,7 +289,6 @@ app.post("/rentroom", async (req, res) => {
             });
         }
 
-        // Create the reservation using the user's email.
         const guest = await Guest.create({
             name: name,
             number: number,
@@ -277,6 +319,7 @@ app.post("/rentroom", async (req, res) => {
         });
     }
 });
+
 app.put("/updatestatus/:id", async (req, res) => {
     try {
         if (!req.session.userId) {
@@ -327,6 +370,3 @@ app.put("/updatestatus/:id", async (req, res) => {
         });
     }
 });
-
-
-

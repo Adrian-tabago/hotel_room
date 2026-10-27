@@ -1,8 +1,14 @@
 
 const mongoose = require("mongoose");
 
+
 const userSchema = new mongoose.Schema(
     {
+        name: {
+            type: String,
+            required: true,
+            trim: true
+        },
         email: {
             type: String,
             required: true,
@@ -18,7 +24,10 @@ const userSchema = new mongoose.Schema(
     {
         timestamps: true
     }
-);const roomSchema = new mongoose.Schema(
+);
+
+
+const roomSchema = new mongoose.Schema(
     {
         roomNumber: {
             type: String,
@@ -29,12 +38,13 @@ const userSchema = new mongoose.Schema(
         roomType: {
             type: String,
             required: true,
-            enum: ["Standard", "Deluxe", "Suite"]
+            enum: ["Standard", "Deluxe", "Suite", "Family"]
         },
+
         status: {
             type: String,
             required: true,
-            enum: ["Available", "Reserved", "Checked In", "Cleaning"],
+            enum: ["Available", "Reserved", "Occupied", "Cleaning", "Maintenance"],
             default: "Available"
         },
 

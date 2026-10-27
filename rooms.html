@@ -729,6 +729,30 @@ let checkIn = document.getElementById("checkIn");
 let checkOut = document.getElementById("checkOut");
 let toast = document.getElementById("toast");
 
+let toastTimer;
+
+function showToast(message) {
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 2600);
+}
+
+document.querySelectorAll(".nav a[data-soon]").forEach(link => {
+    link.addEventListener("click", event => {
+        event.preventDefault();
+        showToast(`${link.dataset.soon} is coming soon.`);
+    });
+});
+
+document.getElementById("notifications").addEventListener("click", () => {
+    showToast("You're all caught up!");
+});
+
 async function display() {
     const response = await fetch("/rooms");
     const data = await response.json();
@@ -798,6 +822,10 @@ async function display() {
 display();
 
 roomSearch.addEventListener("input", display);
+globalSearch.addEventListener("input", () => {
+    roomSearch.value = globalSearch.value;
+    display();
+});
 statusFilter.addEventListener("change", display);
 typeFilter.addEventListener("change", display);
 
@@ -824,6 +852,7 @@ reservationForm.addEventListener("submit", async (event) => {
     const checkIn = document.getElementById("checkIn").value;
     const checkOut = document.getElementById("checkOut").value;
     const specialRequests = document.getElementById("specialRequests").value;
+    
 
     const response = await fetch("/rentroom", {
         method: "POST",
@@ -862,6 +891,30 @@ reservationForm.addEventListener("submit", async (event) => {
 document.getElementById("cancelModal").addEventListener("click", ()=>{
     roomModal.classList.remove("open");
 })
+
+async function loadUser() {
+    try {
+        const response = await fetch("/me");
+
+        if (!response.ok) {
+            console.log("User is not logged in:", response.status);
+            return;
+        }
+
+        const user = await response.json();
+
+       
+
+        document.querySelector(".profile strong").textContent = user.name;
+        document.querySelector(".profile small").textContent = user.email;
+
+    } catch (error) {
+        console.error("Error loading user:", error);
+    }
+}
+
+loadUser();
+
 </script>
 </body>
 </html>

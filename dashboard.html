@@ -35,12 +35,17 @@ body {
     font-size: 13px;
 }
  
-button, input {
+button, input, select, textarea {
     font: inherit;
 }
  
 button {
     cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
 }
  
 :focus-visible {
@@ -113,11 +118,9 @@ button {
     margin-bottom: 28px;
 }
  
-.nav button {
-    border: none;
-    background: transparent;
+.nav a {
     color: #b9c9c4;
-    text-align: left;
+    text-decoration: none;
     padding: 13px 14px;
     border-radius: 8px;
     display: flex;
@@ -127,27 +130,23 @@ button {
     font-size: 13px;
     transition: background .15s, color .15s;
 }
- 
-.nav button i {
+
+.nav a i {
     width: 16px;
     text-align: center;
 }
- 
-.nav button.active {
+
+.nav a:hover {
+    background: rgba(255, 255, 255, .07);
+    color: #fff;
+}
+
+.nav a.active {
     background: rgba(184, 151, 90, .16);
     color: var(--gold);
     box-shadow: inset 3px 0 0 var(--gold);
 }
- 
-.nav button:hover {
-    background: rgba(255, 255, 255, .07);
-    color: #fff;
-}
- 
-.nav button.active:hover {
-    color: var(--gold);
-}
- 
+
 .count {
     margin-left: auto;
     border-radius: 8px;
@@ -734,19 +733,19 @@ h2 {
  
     .brand-copy,
     .nav-label,
-    .nav button span,
+    .nav a span,
     .help,
     .profile-copy,
     .signout {
         display: none;
     }
  
-    .nav button {
+    .nav a {
         justify-content: center;
         padding: 14px 0;
     }
  
-    .nav button i {
+    .nav a i {
         font-size: 16px;
     }
  
@@ -850,49 +849,20 @@ h2 {
         </div>
  
         <div class="nav-label">WORKSPACE</div>
- 
         <nav class="nav">
-            <button class="active" data-page="Overview">
-                <i class="fa-solid fa-table-cells-large"></i>
-                <span>Overview</span>
-            </button>
- 
-            <button data-page="Rooms">
-                <i class="fa-solid fa-list"></i>
-                <span>Rooms</span>
-                <span class="count">12</span>
-            </button>
- 
-            <button data-page="Reservations">
-                <i class="fa-regular fa-calendar-days"></i>
-                <span>Reservations</span>
-            </button>
- 
-            <button data-page="Guests">
-                <i class="fa-solid fa-user-tie"></i>
-                <span>Guests</span>
-            </button>
+            <a href="dashboard.html" class="active"><i class="fa-solid fa-table-cells-large"></i><span>Overview</span></a>
+            <a href="rooms.html"><i class="fa-solid fa-list"></i><span>Rooms</span><span class="count" id="navCount">12</span></a>
+            <a href="#" data-soon="Reservations"><i class="fa-regular fa-calendar-days"></i><span>Reservations</span></a>
+            <a href="#" data-soon="Guests"><i class="fa-solid fa-user-tie"></i><span>Guests</span></a>
         </nav>
- 
+
         <div class="nav-label">MANAGEMENT</div>
- 
         <nav class="nav">
-            <button data-page="Check-in / Check-out">
-                <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                <span>Check-in / Check-out</span>
-            </button>
- 
-            <button data-page="Reports">
-                <i class="fa-solid fa-chart-column"></i>
-                <span>Reports</span>
-            </button>
- 
-            <button data-page="Settings">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings</span>
-            </button>
+            <a href="#" data-soon="Check-in / Check-out"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Check-in / Check-out</span></a>
+            <a href="#" data-soon="Reports"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a>
+            <a href="#" data-soon="Settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
         </nav>
- 
+
         <div class="help">
             <div class="help-icon">
                 <i class="fa-regular fa-circle-question"></i>
@@ -922,16 +892,13 @@ h2 {
             <div class="breadcrumb">
                 <span>Haven Hotel</span>
                 <span>/</span>
-                <strong id="currentPage">
-                    <i class="fa-solid fa-table-cells-large"></i>
-                    Overview
-                </strong>
+                <strong><i class="fa-solid fa-table-cells-large"></i> Overview</strong>
             </div>
  
             <div class="top-actions">
                 <label class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="searchInput" placeholder="Search rooms, guests...">
+                    <input id="globalSearch" placeholder="Search rooms, guests..." aria-label="Global search">
                 </label>
  
                 <button class="icon-btn" id="notifications" aria-label="Notifications">
@@ -952,7 +919,7 @@ h2 {
                         <span class="live">• LIVE OVERVIEW</span>
                     </div>
  
-                    <h1>Good morning, Alex <span class="sparkle">✦</span></h1>
+                    <h1>Good morning, <span id="userName"></span> <span class="sparkle">✦</span></h1>
  
                     <p class="subtitle">
                         Here’s what’s happening at your property today.
@@ -1040,78 +1007,6 @@ h2 {
  
                     <div class="room-grid" id="roomGrid">
  
-                        <div class="room available" data-search="101 standard available">
-                            <strong>101</strong>
-                            <small>Standard</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room occupied" data-search="102 standard occupied">
-                            <strong>102</strong>
-                            <small>Standard</small>
-                            <em>Occupied</em>
-                        </div>
- 
-                        <div class="room reserved" data-search="103 deluxe reserved">
-                            <strong>103</strong>
-                            <small>Deluxe</small>
-                            <em>Reserved</em>
-                        </div>
- 
-                        <div class="room available" data-search="201 deluxe available">
-                            <strong>201</strong>
-                            <small>Deluxe</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room occupied" data-search="202 suite occupied">
-                            <strong>202</strong>
-                            <small>Suite</small>
-                            <em>Occupied</em>
-                        </div>
- 
-                        <div class="room available" data-search="203 standard available">
-                            <strong>203</strong>
-                            <small>Standard</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room available" data-search="301 suite available">
-                            <strong>301</strong>
-                            <small>Suite</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room cleaning" data-search="302 family cleaning">
-                            <strong>302</strong>
-                            <small>Family</small>
-                            <em>Cleaning</em>
-                        </div>
- 
-                        <div class="room available" data-search="303 standard available">
-                            <strong>303</strong>
-                            <small>Standard</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room available" data-search="304 deluxe available">
-                            <strong>304</strong>
-                            <small>Deluxe</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room available" data-search="401 family available">
-                            <strong>401</strong>
-                            <small>Family</small>
-                            <em>Available</em>
-                        </div>
- 
-                        <div class="room reserved" data-search="402 suite reserved">
-                            <strong>402</strong>
-                            <small>Suite</small>
-                            <em>Reserved</em>
-                        </div>
- 
                     </div>
                 </article>
  
@@ -1165,41 +1060,19 @@ function showToast(message) {
     }, 2600);
 }
  
-document.querySelectorAll(".nav button").forEach(button => {
-    button.addEventListener("click", () => {
-        document.querySelectorAll(".nav button").forEach(item => {
-            item.classList.remove("active");
-        });
- 
-        button.classList.add("active");
- 
-        const page = button.dataset.page;
- 
-        const icons = {
-            "Overview": "fa-table-cells-large",
-            "Rooms": "fa-list",
-            "Reservations": "fa-calendar-days",
-            "Guests": "fa-user-tie",
-            "Check-in / Check-out": "fa-arrow-right-arrow-left",
-            "Reports": "fa-chart-column",
-            "Settings": "fa-gear"
-        };
- 
-        document.getElementById("currentPage").innerHTML =
-            `<i class="fa-solid ${icons[page]}"></i> ${page}`;
- 
-        if (page !== "Overview") {
-            showToast(`${page} selected. Connect this menu to its page.`);
-        }
+document.querySelectorAll(".nav a[data-soon]").forEach(link => {
+    link.addEventListener("click", event => {
+        event.preventDefault();
+        showToast(`${link.dataset.soon} is coming soon.`);
     });
 });
- 
+
 document.getElementById("newReservation").addEventListener("click", () => {
     showToast("Connect this button to your reservation form.");
 });
  
 document.getElementById("viewRooms").addEventListener("click", () => {
-    showToast("Showing all sample rooms.");
+    window.location.href = "rooms.html";
 });
  
 document.getElementById("viewReservations").addEventListener("click", () => {
@@ -1210,7 +1083,7 @@ document.getElementById("notifications").addEventListener("click", () => {
     showToast("You're all caught up!");
 });
  
-document.getElementById("searchInput").addEventListener("input", event => {
+document.getElementById("globalSearch").addEventListener("input", event => {
     const query = event.target.value.trim().toLowerCase();
  
     document.querySelectorAll("[data-search]").forEach(item => {
@@ -1220,13 +1093,127 @@ document.getElementById("searchInput").addEventListener("input", event => {
 });
  
 document.querySelectorAll(".room").forEach(room => {
-    room.addEventListener("click", () => {
+    room.addEventListener("click", async() => {
+       
         const roomNumber = room.querySelector("strong").textContent;
         const status = room.querySelector("em").textContent;
  
         showToast(`Room ${roomNumber}: ${status}`);
     });
 });
+
+
+async function loadRooms() {
+    try {
+        const response = await fetch("/rooms");
+
+        if (!response.ok) {
+            throw new Error("Failed to load rooms");
+        }
+
+        const rooms = await response.json();
+
+        const roomGrid = document.getElementById("roomGrid");
+
+        roomGrid.innerHTML = "";
+
+        rooms.forEach(room => {
+           const roomCard = document.createElement("div")
+           roomCard.className = `room ${room.status.toLowerCase()}`
+           roomCard.dataset.search = `${room.roomNumber} ${room.roomType} ${room.status}`
+           roomCard.innerHTML = `
+            <strong>${room.roomNumber}</strong>
+            <small>${room.roomType}</small>
+            <em>${room.status.charAt(0).toUpperCase() + room.status.slice(1)}</em>
+        `;
+            roomGrid.appendChild(roomCard);
+        });
+        l;
+    } catch (error) {
+        console.error("Error loading rooms:", error);
+    }
+}
+
+loadRooms();
+
+
+
+
+async function loadUser() {
+    try {
+        const response = await fetch("/me");
+
+        if (!response.ok) {
+            console.log("User is not logged in:", response.status);
+            return;
+        }
+
+        const user = await response.json();
+
+        document.getElementById("userName").textContent = user.name;
+
+        document.querySelector(".profile strong").textContent = user.name;
+        document.querySelector(".profile small").textContent = user.email;
+
+    } catch (error) {
+        console.error("Error loading user:", error);
+    }
+}
+
+loadUser();
+
+
+/*
+async function loadRooms() {
+
+    try{
+        const response = await fetch("/rooms");
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch rooms");
+        }
+        const data = await response.json();
+
+         data.forEach(element => {
+            setRoomStatus(element.roomNumber, element.status);
+        });
+    }  catch (error) {
+        console.error("Error loading rooms:", error);
+    }
+}
+
+
+function setRoomStatus(roomNumber, status) {
+
+    const room = document.querySelector(
+        `.room[data-search^="${roomNumber} "]`
+    );
+
+    if (!room) {
+        console.log("Room not found:", roomNumber);
+        return;
+    }
+
+    room.classList.remove(
+        "available",
+        "occupied",
+        "reserved",
+        "cleaning"
+    );
+
+    room.classList.add(status.toLowerCase());
+
+    room.querySelector("em").textContent =
+        status.charAt(0).toUpperCase() +
+        status.slice(1).toLowerCase();
+
+    room.dataset.search =
+        `${roomNumber} ${room.querySelector("small").textContent} ${status}`.toLowerCase();
+}
+
+
+loadRooms()*/
+
 </script>
 </body>
 </html>

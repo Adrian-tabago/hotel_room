@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -252,6 +253,13 @@
             <h1>Create Account</h1>
             <p class="subtitle">Create your guest account to begin your stay with us.</p>
             <form id="signupForm">
+
+                <!-- ADDED: FULL NAME FIELD -->
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" autocomplete="name" required>
+                </div>
+
                 <div class="form-group">
                     <label for="signupEmail">Email Address</label>
                     <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" required>
@@ -298,12 +306,16 @@
             event.preventDefault();
 
             try {
+       
+                const signupName = document.getElementById("signupName").value.trim();
+
                 const signupEmail = document.getElementById("signupEmail").value.trim();
                 const signupPassword = document.getElementById("signupPassword").value;
                 const confirmPassword = document.getElementById("confirmPassword").value;
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-                if (!emailPattern.test(signupEmail) || signupPassword.length < 8 || signupPassword !== confirmPassword) {
+                // ADDED: Validate that the name is not empty
+                if (!signupName || !emailPattern.test(signupEmail) || signupPassword.length < 8 || signupPassword !== confirmPassword) {
                     alert("Invalid input");
                     return;
                 }
@@ -312,6 +324,8 @@
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
+                        
+                        name: signupName,
                         email: signupEmail,
                         password: signupPassword
                     })
