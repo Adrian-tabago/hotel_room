@@ -247,6 +247,27 @@ app.get("/rooms", async (req, res) => {
     }
 });
 
+function getRoomStatus(checkIn, checkOut) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+
+    checkInDate.setHours(0, 0, 0, 0);
+    checkOutDate.setHours(0, 0, 0, 0);
+
+    if (today < checkInDate) {
+        return "Reserved";
+    }
+
+    if (today >= checkInDate && today < checkOutDate) {
+        return "Occupied";
+    }
+
+    return "Cleaning";
+}
+
 app.post("/rentroom", async (req, res) => {
     try {
         if (!req.session.userId) {
@@ -302,12 +323,13 @@ app.post("/rentroom", async (req, res) => {
             specialRequests: specialRequests
         });
 
-        room.status = "Reserved";
+        room.status = getRoomStatus(checkIn, checkOut);
         await room.save();
 
         res.status(201).json({
             message: "Room reserved successfully",
-            guest: guest
+            guest: guest,
+            roomStatus: room.status
         });
 
     } catch (error) {
@@ -319,6 +341,22 @@ app.post("/rentroom", async (req, res) => {
         });
     }
 });
+
+
+app.get("/guest", async (req, res) => {
+    try {
+        const rent = await Guest.find();
+
+        res.json(rent);
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Error fetching guests",
+            error: err.message
+        });
+    }
+});
+
 
 app.put("/updatestatus/:id", async (req, res) => {
     try {
