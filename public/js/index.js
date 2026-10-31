@@ -25,7 +25,6 @@
                 const confirmPassword = document.getElementById("confirmPassword").value;
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-                // ADDED: Validate that the name is not empty
                 if (!signupName || !emailPattern.test(signupEmail) || signupPassword.length < 8 || signupPassword !== confirmPassword) {
                     alert("Invalid input");
                     return;

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haven Hotel | Reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="css/reservations.css">
+<style>.report-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.status-panel {
+    margin-top: 20px;
+}
+
+.status-list {
+    display: grid;
+    gap: 19px;
+    margin-top: 24px;
+}
+
+.status-row {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr) 34px;
+    align-items: center;
+    gap: 18px;
+}
+
+.status-name {
+    color: #40554f;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status-track {
+    height: 9px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #ebe7df;
+    box-shadow: inset 0 1px 2px rgba(13, 48, 40, 0.05);
+}
+
+.status-bar {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.55s ease;
+}
+
+.status-value {
+    text-align: right;
+    color: var(--green-dark);
+    font: 700 14px var(--serif);
+}
+
+.status-bar.available {
+    background: linear-gradient(90deg, #4f8a6d, #6da487);
+}
+
+.status-bar.reserved {
+    background: linear-gradient(90deg, #b98d49, #d0aa6a);
+}
+
+.status-bar.occupied {
+    background: linear-gradient(90deg, #0f493b, #236652);
+}
+
+.status-bar.cleaning {
+    background: linear-gradient(90deg, #648f8c, #82a9a6);
+}
+
+.status-bar.maintenance {
+    background: linear-gradient(90deg, #955d57, #b2746d);
+}
+
+.status-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(13, 48, 40, 0.07);
+    color: var(--muted);
+    font-size: 9px;
+}
+
+.status-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend-dot.available {
+    background: #5c9679;
+}
+
+.legend-dot.reserved {
+    background: #c39a58;
+}
+
+.legend-dot.occupied {
+    background: #185746;
+}
+
+.legend-dot.cleaning {
+    background: #739b98;
+}
+
+.legend-dot.maintenance {
+    background: #a66861;
+}
+
+.export-note {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 9px;
+}
+
+@media (max-width: 1120px) {
+    .report-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 620px) {
+    .report-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .status-row {
+        grid-template-columns: 80px minmax(0, 1fr) 28px;
+        gap: 10px;
+    }
+
+    .status-name {
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">H</div>
+            <div class="brand-copy">
+                <div class="brand-name">haven<span>hotel</span></div>
+                <div class="brand-sub">PROPERTY MANAGEMENT</div>
+            </div>
+        </div>
+
+        <div class="nav-label">WORKSPACE</div>
+        <nav class="nav">
+            <a href="dashboard.html"><i class="fa-solid fa-table-cells-large"></i><span>Overview</span></a>
+            <a href="rooms.html"><i class="fa-solid fa-list"></i><span>Rooms</span><span class="count" id="navCount">0</span></a>
+            <a href="reservations.html"><i class="fa-regular fa-calendar-days"></i><span>Reservations</span></a>
+            <a href="#" data-soon="Guests"><i class="fa-solid fa-user-tie"></i><span>Guests</span></a>
+        </nav>
+
+        <div class="nav-label">MANAGEMENT</div>
+        <nav class="nav">
+            <a href="checkin.html"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Check-in / Check-out</span></a>
+            <a href="report.html" class="active"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a>
+            <a href="#" data-soon="Settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+        </nav>
+
+        <div class="help">
+            <div class="help-icon"><i class="fa-regular fa-circle-question"></i></div>
+            <div><strong>Need a hand?</strong><small>Visit help center</small></div>
+            <i class="fa-solid fa-angle-right" style="margin-left:auto"></i>
+        </div>
+
+        <div class="profile">
+            <div class="avatar">AM</div>
+            <div class="profile-copy"><strong>Alex Morgan</strong><small>Property Manager</small></div>
+            <a class="signout" href="index.html" title="Sign out" aria-label="Sign out"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="breadcrumb">
+                <span>Haven Hotel</span>
+                <span>/</span>
+                <strong><i class="fa-solid fa-chart-column"></i> Reports</strong>
+            </div>
+            <div class="top-actions">
+                <label class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="globalSearch" placeholder="Search rooms, guests..." aria-label="Global search">
+                </label>
+                <button class="icon-btn" id="notifications" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </button>
+                <div class="top-avatar">AM</div>
+            </div>
+        </header>
+
+        <div class="content">
+            <section class="page-head">
+                <div>
+                    <div class="eyebrow">PROPERTY INSIGHTS <span class="live">• HAVEN HOTEL</span></div>
+                    <h1>Reports</h1>
+                    <p class="subtitle">Monitor room availability, occupancy, and the current operational status of the property.</p>
+                    <div class="hero-chips" aria-label="Report highlights">
+                        <span class="hero-chip"><i class="fa-solid fa-chart-line"></i> Hotel performance</span>
+                        <span class="hero-chip"><i class="fa-solid fa-bed"></i> Room status overview</span>
+                    </div>
+                </div>
+                <button class="primary" type="button" onclick="exportCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+                <div class="hero-media" role="img" aria-label="Luxury hotel interior"></div>
+            </section>
+
+            <section class="stats report-stats">
+                <article class="stat">
+                    <div class="stat-top"><span>Total Rooms</span><span class="stat-icon blue"><i class="fa-solid fa-building"></i></span></div>
+                    <div class="stat-number" id="totalRooms">0</div>
+                    <div class="stat-note">All rooms registered in the hotel</div>
+                </article>
+                <article class="stat">
+                    <div class="stat-top"><span>Occupancy</span><span class="stat-icon green"><i class="fa-solid fa-bed"></i></span></div>
+                    <div class="stat-number" id="occupancy">0%</div>
+                    <div class="stat-note">Rooms currently occupied by guests</div>
+                </article>
+                <article class="stat">
+                    <div class="stat-top"><span>Available Rooms</span><span class="stat-icon purple"><i class="fa-solid fa-door-open"></i></span></div>
+                    <div class="stat-number" id="availableRooms">0</div>
+                    <div class="stat-note">Rooms ready for new reservations</div>
+                </article>
+                <article class="stat">
+                    <div class="stat-top"><span>Maintenance</span><span class="stat-icon orange"><i class="fa-solid fa-screwdriver-wrench"></i></span></div>
+                    <div class="stat-number" id="maintenanceRooms">0</div>
+                    <div class="stat-note">Rooms temporarily unavailable</div>
+                </article>
+            </section>
+
+            <section class="panel status-panel">
+                <div class="panel-head">
+                    <div>
+                        <h2>Room Status Overview</h2>
+                        <p class="panel-sub">Current distribution of rooms by operational status.</p>
+                    </div>
+                </div>
+
+                <div class="status-list">
+                    <div class="status-row">
+                        <div class="status-name">Available</div>
+                        <div class="status-track"><div class="status-bar available" id="availableBar"></div></div>
+                        <div class="status-value" id="availableNumber">0</div>
+                    </div>
+                    <div class="status-row">
+                        <div class="status-name">Reserved</div>
+                        <div class="status-track"><div class="status-bar reserved" id="reservedBar"></div></div>
+                        <div class="status-value" id="reservedNumber">0</div>
+                    </div>
+                    <div class="status-row">
+                        <div class="status-name">Occupied</div>
+                        <div class="status-track"><div class="status-bar occupied" id="occupiedBar"></div></div>
+                        <div class="status-value" id="occupiedNumber">0</div>
+                    </div>
+                    <div class="status-row">
+                        <div class="status-name">Cleaning</div>
+                        <div class="status-track"><div class="status-bar cleaning" id="cleaningBar"></div></div>
+                        <div class="status-value" id="cleaningNumber">0</div>
+                    </div>
+                    <div class="status-row">
+                        <div class="status-name">Maintenance</div>
+                        <div class="status-track"><div class="status-bar maintenance" id="maintenanceBar"></div></div>
+                        <div class="status-value" id="maintenanceNumber">0</div>
+                    </div>
+                </div>
+
+                <div class="status-legend">
+                    <span><i class="legend-dot available"></i>Available</span>
+                    <span><i class="legend-dot reserved"></i>Reserved</span>
+                    <span><i class="legend-dot occupied"></i>Occupied</span>
+                    <span><i class="legend-dot cleaning"></i>Cleaning</span>
+                    <span><i class="legend-dot maintenance"></i>Maintenance</span>
+                </div>
+                <p class="export-note">Bar length represents each status as a percentage of all hotel rooms.</p>
+            </section>
+        </div>
+    </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+    clearTimeout(window.reportToastTimer);
+    window.reportToastTimer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 2500);
+}
+
+async function loadReports() {
+    try {
+        const response = await fetch("/rooms");
+        if(!response.ok) throw new Error("Unable to load room data");
+
+        const data = await response.json();
+        let available = 0;
+        let reserved = 0;
+        let occupied = 0;
+        let cleaning = 0;
+        let maintenance = 0;
+
+        data.forEach(room => {
+            if(room.status === "Available") available++;
+            else if(room.status === "Reserved") reserved++;
+            else if(room.status === "Occupied") occupied++;
+            else if(room.status === "Cleaning") cleaning++;
+            else if(room.status === "Maintenance") maintenance++;
+        });
+
+        const totalRooms = data.length;
+        const occupancy = totalRooms ? (occupied / totalRooms) * 100 : 0;
+
+        document.getElementById("totalRooms").textContent = totalRooms;
+        document.getElementById("navCount").textContent = totalRooms;
+        document.getElementById("occupancy").textContent = Math.round(occupancy) + "%";
+        document.getElementById("availableRooms").textContent = available;
+        document.getElementById("maintenanceRooms").textContent = maintenance;
+
+        document.getElementById("availableNumber").textContent = available;
+        document.getElementById("reservedNumber").textContent = reserved;
+        document.getElementById("occupiedNumber").textContent = occupied;
+        document.getElementById("cleaningNumber").textContent = cleaning;
+        document.getElementById("maintenanceNumber").textContent = maintenance;
+
+        const percent = value => totalRooms ? (value / totalRooms) * 100 : 0;
+        document.getElementById("availableBar").style.width = percent(available) + "%";
+        document.getElementById("reservedBar").style.width = percent(reserved) + "%";
+        document.getElementById("occupiedBar").style.width = percent(occupied) + "%";
+        document.getElementById("cleaningBar").style.width = percent(cleaning) + "%";
+        document.getElementById("maintenanceBar").style.width = percent(maintenance) + "%";
+    } catch(error) {
+        console.error(error);
+        showToast("Could not load report data.");
+    }
+}
+
+function csvCell(value) {
+    const text = String(value ?? "");
+    return `"${text.replaceAll('"', '""')}"`;
+}
+
+async function exportCSV() {
+    try {
+        const response = await fetch("/rooms");
+        if(!response.ok) throw new Error("Unable to export room data");
+
+        const data = await response.json();
+        let csv = "Room Number,Room Type,Floor,Status,Feature,Guests,Rate\n";
+
+        data.forEach(room => {
+            csv += [
+                room.roomNumber,
+                room.roomType,
+                room.floor,
+                room.status,
+                room.feature,
+                room.guests,
+                room.rate
+            ].map(csvCell).join(",") + "\n";
+        });
+
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "report.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast("Room report exported successfully.");
+    } catch(error) {
+        console.error(error);
+        showToast("Could not export the CSV file.");
+    }
+}
+
+loadReports();
+</script>
+</body>
+</html>

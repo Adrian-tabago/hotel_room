@@ -6,7 +6,6 @@ const { User } = require("../models/schema");
 const router = express.Router();
 
 
-// REGISTER USER
 router.post("/users", async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -80,7 +79,6 @@ router.post("/users", async (req, res) => {
 });
 
 
-// LOGIN USER
 router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -128,7 +126,6 @@ router.post("/login", async (req, res) => {
 });
 
 
-// GET CURRENT USER
 router.get("/me", async (req, res) => {
     try {
         if (!req.session.userId) {

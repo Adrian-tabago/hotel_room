@@ -88,7 +88,6 @@ function getRoomStatus(checkIn, checkOut) {
 }
 
 
-// RESERVE / RENT ROOM
 router.post("/rentroom", async (req, res) => {
     try {
         if (!req.session.userId) {
@@ -164,7 +163,6 @@ router.post("/rentroom", async (req, res) => {
 });
 
 
-// GET ALL GUESTS
 router.get("/guest", async (req, res) => {
     try {
         const rent = await Guest.find();
@@ -180,7 +178,6 @@ router.get("/guest", async (req, res) => {
 });
 
 
-// UPDATE ROOM STATUS
 router.put("/updatestatus/:id", async (req, res) => {
     try {
         if (!req.session.userId) {

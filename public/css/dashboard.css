@@ -435,10 +435,7 @@ h2 { font: 600 24px/1.1 var(--serif); color: var(--green-dark); }
 
 
 
-/* =========================================================
-   HAVEN HOTEL — HD LOCAL PHOTO HERO / RESPONSIVE DESIGN
-   Design-only override. Existing JavaScript is untouched.
-   ========================================================= */
+
 .page-head {
     position: relative;
     min-height: 282px;
@@ -641,7 +638,7 @@ h2 { font: 600 24px/1.1 var(--serif); color: var(--green-dark); }
 
 
 
-/* FINAL PHOTO FIX — remote HD first, built-in image fallback second. */
+
 .page-head {
     min-height: 258px !important;
     padding-top: 36px !important;
@@ -680,10 +677,7 @@ h2 { font: 600 24px/1.1 var(--serif); color: var(--green-dark); }
     .page-head .hero-media { height: 208px !important; }
 }
 
-/* =========================================================
-   HAVEN HOTEL — MODERN HD PHOTO OVERRIDE
-   Added design layer only. Existing JavaScript remains intact.
-   ========================================================= */
+
 .page-head .hero-media {
     background-image: url("https://images.unsplash.com/photo-1776361984994-089a9df800f6?auto=format&fit=crop&fm=jpg&q=88&w=2400") !important;
     background-size: cover;

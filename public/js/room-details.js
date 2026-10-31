@@ -1,4 +1,3 @@
-/* Added UI enhancement only — the original room JavaScript above is unchanged. */
 (() => {
     const roomPhotos = ['https://images.unsplash.com/photo-1765862835319-18fb6f8caff6?auto=format&fit=crop&fm=jpg&q=86&w=1800', 'https://images.unsplash.com/photo-1760573776062-7d2a7baeb49d?auto=format&fit=crop&fm=jpg&q=86&w=1800', 'https://images.unsplash.com/photo-1766733041960-0de62f403e7b?auto=format&fit=crop&fm=jpg&q=86&w=1800', 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&fm=jpg&q=86&w=1800'];
     const list = document.getElementById('roomList');
