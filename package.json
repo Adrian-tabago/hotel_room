@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "backend.js",
-"scripts": {
+  "scripts": {
     "start": "node backend.js",
     "dev": "node --watch backend.js"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Adrian-tabago/hotel_room.git"
@@ -23,6 +23,7 @@
     "bcrypt": "^6.0.0",
     "express": "^5.3.0",
     "express-session": "^1.19.0",
-    "mongoose": "^9.11.4"
+    "mongoose": "^9.11.4",
+    "nodemon": "^3.1.14"
   }
 }

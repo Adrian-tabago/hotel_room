@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haven Hotel | Guest Account</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <main class="container">
+        <div class="logo" aria-label="Haven Hotel">H</div>
+
+        <!-- LOGIN FORM -->
+        <section id="loginSection">
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Sign in to manage your stay and reservations.</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
+                        <button type="button" class="toggle-password" data-target="loginPassword">Show</button>
+                    </div>
+                </div>
+                <a href="#" class="forgot" id="forgotPassword">Forgot password?</a>
+                <button type="submit" class="submit-btn">Sign In</button>
+            </form>
+            <p class="switch-text">Don't have an account?
+                <button type="button" class="switch-link" id="showSignup">Create Account</button>
+            </p>
+        </section>
+
+        <!-- SIGN UP FORM -->
+        <section id="signupSection" hidden>
+            <h1>Create Account</h1>
+            <p class="subtitle">Create your guest account to begin your stay with us.</p>
+            <form id="signupForm">
+
+                <!-- ADDED: FULL NAME FIELD -->
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" autocomplete="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="At least 8 characters" minlength="8" autocomplete="new-password" required>
+                        <button type="button" class="toggle-password" data-target="signupPassword">Show</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Enter your password again" minlength="8" autocomplete="new-password" required>
+                        <button type="button" class="toggle-password" data-target="confirmPassword">Show</button>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Create Account</button>
+            </form>
+            <p class="switch-text">Already have an account?
+                <button type="button" class="switch-link" id="showLogin">Sign In</button>
+            </p>
+        </section>
+    </main>
+
+    <script src="js/index.js"></script>
+</body>
+</html>
