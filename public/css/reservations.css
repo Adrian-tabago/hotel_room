@@ -2332,6 +2332,269 @@ body:is(.dashboard-page,.rooms-page,.reservations-page,.report-page) .panel .pan
     font: 600 30px/1.12 var(--serif);
 }
 
+#details {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(9, 21, 16, 0.65);
+    backdrop-filter: blur(5px);
+}
+
+#details.hide {
+    display: none;
+}
+
+#details .guest-modal {
+    width: 100%;
+    max-width: 660px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fffdf9;
+    border: 1px solid #e8e3d9;
+    border-radius: 18px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+    animation: modalShow 0.25s ease;
+}
+
+#details .guest-modal-header {
+    background: linear-gradient(125deg, #10382c, #205341);
+    padding: 25px 30px 30px;
+    color: white;
+}
+
+#details .modal-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+#details .modal-top span {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #e6c58e;
+}
+
+#details #closeDetails {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 9px;
+    background: rgba(255,255,255,.08);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#details #closeDetails:hover {
+    background: rgba(255,255,255,.18);
+}
+
+#details .guest-title span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #d5b680;
+}
+
+#details .guest-title h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(32px, 4vw, 43px);
+    font-weight: 600;
+    color: #fffaf0;
+    margin: 8px 0 5px;
+    line-height: 1.1;
+}
+
+#details .guest-title p {
+    font-size: 12px;
+    color: #d2e1d5;
+    margin: 0;
+}
+
+#details .guest-modal-body {
+    padding: 28px 30px 25px;
+}
+
+#details .guest-modal-body h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 800;
+    color: #98815c;
+    margin: 0 0 13px;
+}
+
+#details .details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+#details .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 17px;
+    border: 1px solid #e9e7e0;
+    border-radius: 12px;
+    background: #f9f9f6;
+    transition: border-color 0.2s ease;
+}
+
+#details .detail-item:hover {
+    border-color: #cbb28b;
+}
+
+#details .detail-item span {
+    font-size: 11px;
+    color: #7c8a7f;
+    font-weight: 500;
+}
+
+#details .detail-item strong {
+    font-size: 13px;
+    color: #203d30;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+#details .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #e9e7e0;
+}
+
+#details .modal-footer span {
+    font-size: 11px;
+    color: #829086;
+}
+
+#details .modal-footer span i {
+    color: #b99862;
+    margin-right: 6px;
+}
+
+#details #closeModal {
+    border: none;
+    border-radius: 10px;
+    background: #164b3c;
+    color: white;
+    padding: 12px 23px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#details #closeModal:hover {
+    background: #246b54;
+}
+
+html.dark #details {
+    background: rgba(0, 0, 0, 0.78);
+}
+
+html.dark #details .guest-modal {
+    background: #121d17;
+    border-color: #35483b;
+}
+
+html.dark #details .guest-modal-header {
+    background: linear-gradient(125deg, #132b21, #1a4030);
+}
+
+html.dark #details .guest-modal-body h3 {
+    color: #d7b887;
+}
+
+html.dark #details .detail-item {
+    background: #1c2b21;
+    border-color: #344639;
+}
+
+html.dark #details .detail-item:hover {
+    border-color: #b89a69;
+}
+
+html.dark #details .detail-item span {
+    color: #a7b6a9;
+}
+
+html.dark #details .detail-item strong {
+    color: #f6f1e7;
+}
+
+html.dark #details .modal-footer {
+    border-top-color: #344639;
+}
+
+html.dark #details .modal-footer span {
+    color: #aab9ad;
+}
+
+html.dark #details #closeModal {
+    background: #e4c28e;
+    color: #18382a;
+}
+
+html.dark #details #closeModal:hover {
+    background: #f0d5ab;
+}
+
+@keyframes modalShow {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    #details {
+        padding: 12px;
+    }
+
+    #details .guest-modal-header {
+        padding: 22px;
+    }
+
+    #details .guest-modal-body {
+        padding: 22px;
+    }
+
+    #details .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #details .modal-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    #details #closeModal {
+        width: 100%;
+    }
+}
+
+
 @media (max-width: 1240px) {
 body:is(.dashboard-page,.rooms-page,.reservations-page,.checkin-page,.report-page,.settings-page) .content {
     padding: 23px 23px 36px;

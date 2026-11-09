@@ -66,8 +66,8 @@ router.get("/rooms", async (req, res) => {
 
 
 
-//fixing this
-function getRoomStatus(checkIn, checkOut, room) {
+  //aayusin kopa
+function getRoomStatus(checkIn, checkOut, room, isNewReservation = false) {
     const today = new Date();
 
     const checkInDate = new Date(checkIn);
@@ -79,7 +79,7 @@ function getRoomStatus(checkIn, checkOut, room) {
     checkInDate.setHours(0, 0, 0, 0);
     checkOutDate.setHours(0, 0, 0, 0);
 
-    if (room.status === "Available") {
+    if (!isNewReservation && room.status === "Available") {
         return "Available";
     }
 
@@ -106,7 +106,7 @@ function getRoomStatus(checkIn, checkOut, room) {
     return "Available";
 }
 
-// fixing this
+  //aayusin kopa
 async function updateRoomStatuses() {
     try {
         const rooms = await Room.find();
@@ -247,7 +247,7 @@ router.post("/rentroom", async (req, res) => {
             specialRequests: specialRequests
         });
 
-        room.status = getRoomStatus(checkIn, checkOut);
+        room.status = getRoomStatus(checkIn, checkOut, room, true);
         await room.save();
 
         res.status(201).json({
@@ -281,6 +281,53 @@ router.get("/guest", async (req, res) => {
         });
     }
 });
+
+
+
+
+router.get("/details/:id", async (req, res) => {
+    try {
+        if (!req.session.userId) {
+            return res.status(401).json({
+                message: "Please log in first"
+            });
+        }
+
+        const guest = await Guest.findById(req.params.id);
+
+        if (!guest) {
+            return res.status(404).json({
+                message: "Guest not found"
+            });
+        }
+
+        const isOwner = String(guest.owner) === String(req.session.userId);
+
+        const name = String(guest.name || "");
+        const email = String(guest.email || "");
+        const number = String(guest.number || "");
+
+        const result = {
+            _id: guest._id,
+            name: isOwner ? name : name.charAt(0) + "******",
+            email: isOwner ? email : email.charAt(0) + "****@****",
+            number: isOwner ? number : "*******" + number.slice(-4),
+            roomNumber: guest.roomNumber,
+            roomType: guest.roomType,
+            checkIn: guest.checkIn,
+            checkOut: guest.checkOut,
+            isOwner: isOwner
+        };
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error fetching guest details"
+        });
+    }
+});
+
 
 
 router.put("/checkout/:id", async (req, res) => {
