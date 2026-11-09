@@ -1,0 +1,20 @@
+LUXENT HOTEL - ONLINE HD IMAGE SOURCES
+
+Page hero photographs are loaded from Pexels (https://www.pexels.com/license/),
+using CSS-only image URLs at requested widths up to 2600px.
+
+Dashboard: https://www.pexels.com/photo/luxurious-hotel-lobby-with-elegant-decor-40624454/
+Rooms: https://www.pexels.com/photo/cozy-hotel-room-with-elegant-decor-40624606/
+Reservations: https://www.pexels.com/photo/elegant-hotel-bedroom-with-classic-decor-40624479/
+Check-in/Check-out: https://www.pexels.com/photo/elegant-hotel-lobby-with-receptionist-at-desk-40624362/
+Reports: https://www.pexels.com/photo/elegant-hotel-lobby-with-classic-decor-40624144/
+Settings: https://www.pexels.com/photo/elegant-hotel-lobby-with-artwork-and-chandelier-40495413/
+Room cards:
+https://www.pexels.com/photo/elegant-hotel-bedroom-with-classic-decor-40624479/
+https://www.pexels.com/photo/8082564/
+https://www.pexels.com/photo/luxury-hotel-room-with-modern-interior-design-34672504/
+https://www.pexels.com/photo/cozy-hotel-room-with-elegant-decor-40624606/
+
+Existing local image files are retained in public/images/ for reference.
+No existing JavaScript or HTML was modified.
+An internet connection is required to display online photos.

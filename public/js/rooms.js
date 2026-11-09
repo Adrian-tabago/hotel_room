@@ -1,6 +1,5 @@
 let roomList = document.getElementById("roomList");
-let roomSearch = document.getElementById("roomSearch");
-let globalSearch = document.getElementById("globalSearch");
+let roomSearch = document.getElementById("globalSearch");
 let statusFilter = document.getElementById("statusFilter");
 let typeFilter = document.getElementById("typeFilter");
 let roomCount = document.getElementById("roomCount");
@@ -39,6 +38,18 @@ document.getElementById("notifications").addEventListener("click", () => {
 async function display() {
     const response = await fetch("/rooms");
     const data = await response.json();
+
+    const selectedRoom = reservationRoom.value;
+    reservationRoom.innerHTML = '<option value="">Choose an available room</option>';
+    data.filter(room => room.status === "Available").forEach(room => {
+        const option = document.createElement("option");
+        option.value = room.roomNumber;
+        option.textContent = `Room ${room.roomNumber} - ${room.roomType}`;
+        reservationRoom.appendChild(option);
+    });
+    if (data.some(room => room.status === "Available" && room.roomNumber === selectedRoom)) {
+        reservationRoom.value = selectedRoom;
+    }
 
     let searchValue = roomSearch.value.toLowerCase().trim();
     let statusValue = statusFilter.value;
@@ -100,20 +111,43 @@ async function display() {
     });
 
     roomCount.textContent = filteredRooms.length;
+
+    if (new URLSearchParams(window.location.search).get("newReservation") === "1") {
+        window.history.replaceState(null, "", "rooms.html");
+        openReservation();
+    }
 }
 
 display();
 
 roomSearch.addEventListener("input", display);
-globalSearch.addEventListener("input", () => {
-    roomSearch.value = globalSearch.value;
-    display();
-});
 statusFilter.addEventListener("change", display);
 typeFilter.addEventListener("change", display);
 
 let selectedTaskId = null;
 let selectedRoomNumber = null;
+
+function openReservation(roomNumber = "") {
+    reservationRoom.value = roomNumber;
+    selectedRoomNumber = roomNumber;
+    roomModal.hidden = false;
+    roomModal.classList.add("open");
+    reservationRoom.focus();
+}
+
+function closeReservation() {
+    roomModal.classList.remove("open");
+    roomModal.hidden = true;
+}
+
+document.getElementById("startReservation").addEventListener("click", event => {
+    event.preventDefault();
+    openReservation();
+});
+
+reservationRoom.addEventListener("change", () => {
+    selectedRoomNumber = reservationRoom.value;
+});
 
 document.addEventListener("click", (event) => {
     const btn = event.target.closest('[data-act="book"]');
@@ -122,12 +156,15 @@ document.addEventListener("click", (event) => {
         selectedTaskId = btn.dataset.id;
         selectedRoomNumber = btn.dataset.room;
 
-        roomModal.classList.add("open");
+        openReservation(selectedRoomNumber);
     }
 });
 
 reservationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    selectedRoomNumber = reservationRoom.value;
+    if (!selectedRoomNumber) return;
 
     const guestName = document.getElementById("guestName").value;
     const guestPhone = document.getElementById("guestPhone").value;
@@ -162,8 +199,7 @@ reservationForm.addEventListener("submit", async (event) => {
 
     alert("Room reserved successfully!");
 
-    roomModal.classList.remove("open");
-    roomModal.hidden = true;
+    closeReservation();
 
     reservationForm.reset();
 
@@ -171,9 +207,11 @@ reservationForm.addEventListener("submit", async (event) => {
 });
 
 
-document.getElementById("cancelModal").addEventListener("click", ()=>{
-    roomModal.classList.remove("open");
-})
+document.getElementById("cancelModal").addEventListener("click", closeReservation);
+document.getElementById("closeModal").addEventListener("click", closeReservation);
+roomModal.addEventListener("click", event => {
+    if (event.target === roomModal) closeReservation();
+});
 
 async function loadUser() {
     try {

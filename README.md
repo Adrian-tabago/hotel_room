@@ -1,4 +1,4 @@
-# Hotel Reservation System
+# Luxent Hotel System
 
 ## Organized structure
 

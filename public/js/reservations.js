@@ -152,41 +152,33 @@ document.addEventListener("DOMContentLoaded", fetchReservations);
 
 
 
+function filterReservations() {
+    const search = document.getElementById("reservationSearch").value.toLowerCase().trim();
 
-    function filterReservations() {
-        const searchInput =
-            document.getElementById("reservationSearch");
+    const filter = document.getElementById("reservationFilter").value.toLowerCase();
 
-        const filterSelect =
-            document.getElementById("reservationFilter");
+    const filtered = reservations.filter(reservation => {
 
-        const query = searchInput
-            ? searchInput.value.trim().toLowerCase()
-            : "";
+        const name = String(reservation.name || "").toLowerCase();
+        const number = String(reservation.number || "").toLowerCase();
+        const room = String(reservation.roomNumber || "").toLowerCase();
 
-        const selectedFilter = filterSelect
-            ? filterSelect.value.toLowerCase()
-            : "all";
+        const status = getReservationStatus(reservation).toLowerCase();
 
-        const filteredReservations = reservations.filter(reservation => {
-            const matchesSearch =
-                reservation.name.toLowerCase().includes(query) ||
-                reservation.contact.toLowerCase().includes(query) ||
-                reservation.roomNumber.toLowerCase().includes(query);
+        const matchesSearch =
+            name.includes(search) ||
+            number.includes(search) ||
+            room.includes(search);
 
-            const status =
-                getReservationStatus(reservation).toLowerCase();
+        const matchesStatus =
+            filter === "all" ||
+            status === filter;
 
-            const matchesStatus =
-                selectedFilter === "all" ||
-                status === selectedFilter;
+        return matchesSearch && matchesStatus;
+    });
 
-            return matchesSearch && matchesStatus;
-        });
-
-        displayReservations(filteredReservations);
-    }
-
+    displayReservations(filtered);
+}
 
 
 

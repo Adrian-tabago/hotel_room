@@ -1,0 +1,348 @@
+
+
+@layer luxent-base {
+html.dark {
+    color-scheme: dark;
+    --canvas: #101714;
+    --background: #101714;
+    --white: #1b2922;
+    --cream: #1b2922;
+    --ivory: #16221b;
+    --text: #f2efe5;
+    --muted: #aebeb2;
+    --border: #35473c;
+    --green: #e3c28b;
+    --green-dark: #f3e9d6;
+    --green-deep: #0b221b;
+    --green-soft: #20382b;
+    --gold: #e1bc7b;
+    --gold-dark: #d8b77f;
+    --gold-soft: #273323;
+    --shadow-sm: 0 8px 25px rgba(0,0,0,.22);
+    --shadow-md: 0 15px 35px rgba(0,0,0,.30);
+    --shadow-lg: 0 30px 80px rgba(0,0,0,.4);
+}
+}
+
+html.dark body,
+html.dark body:is(.dashboard-page,.rooms-page,.reservations-page,.checkin-page,.report-page,.settings-page),
+html.dark body .main {
+    background: #101714;
+    color: #f2efe5;
+}
+
+html.dark body .sidebar {
+    background: linear-gradient(165deg,#102d23,#081d16 65%,#07130f);
+}
+
+html.dark body .topbar {
+    background: #17231c;
+    border-bottom-color: #35473c;
+}
+
+html.dark body .breadcrumb {
+    color: #aebbb0;
+}
+
+html.dark body .breadcrumb strong,
+html.dark body .breadcrumb strong i {
+    color: #e3c28b;
+}
+
+html.dark body :is(.stat,.panel,.filters,.front-card,.guest-panel,.mini-panel,.settings-panel,.status-panel,.empty,.card),
+html.dark body .room-list > .card,
+html.dark body .reservations-page .panel {
+    background: #1b2922;
+    background-color: #1b2922;
+    color: #f2efe5;
+    border-color: #35473c;
+    box-shadow: 0 8px 22px rgba(0,0,0,.16);
+}
+
+html.dark body :is(.stat,.panel,.front-card,.guest-panel,.mini-panel,.settings-panel,.card) :is(h2,h3),
+html.dark body :is(.panel,.stat,.front-card,.guest-panel,.mini-panel,.settings-panel,.card) strong,
+html.dark body :is(.panel,.stat,.front-card,.guest-panel,.mini-panel,.settings-panel,.card) .stat-number,
+html.dark body :is(.panel,.stat,.front-card,.guest-panel,.mini-panel,.settings-panel,.card) .price,
+html.dark body .panel-head h2,
+html.dark body .room-list > .card .card-top h3,
+html.dark body .room-list > .card .price,
+html.dark body .room-grid .room strong {
+    color: #f3e9d6;
+}
+
+html.dark body :is(.panel,.stat,.front-card,.guest-panel,.mini-panel,.settings-panel,.card) :is(.meta,.panel-sub,.panel-intro,.stat-note,.stat-top,.features,.room-count,.price small,small),
+html.dark body .guest-panel :is(.guest-total,.room-details),
+html.dark body .settings-field label {
+    color: #b1c0b4;
+}
+
+html.dark body .room-list > .card .card-top,
+html.dark body .room-list > .card .price-row,
+html.dark body .room-list > .card .features,
+html.dark body .room-list > .card .actions,
+html.dark body .card .card-top,
+html.dark body .card .price-row,
+html.dark body .card .features,
+html.dark body .card .actions {
+    background: #1b2922;
+    background-color: #1b2922;
+    border-color: #35473c;
+}
+
+html.dark body .room-list > .card .photo,
+html.dark body .card .photo,
+html.dark body .page-head .hero-media,
+html.dark body #roomModal .reservation-visual {
+    background-color: #18372b;
+}
+
+html.dark body .room-list > .card .badge.Available,
+html.dark body .badge.Available,
+html.dark body .badge.available {
+    background: #173e2f;
+    color: #a4e0ba;
+    border-color: #32684c;
+}
+
+html.dark body .room-list > .card .badge.Reserved,
+html.dark body .badge.Reserved,
+html.dark body .badge.reserved {
+    background: #263a40;
+    color: #b0d8e4;
+    border-color: #41626c;
+}
+
+html.dark body .room-list > .card .badge.Occupied,
+html.dark body .badge.Occupied,
+html.dark body .badge.occupied,
+html.dark body .badge.Checked {
+    background: #443724;
+    color: #f0d3a0;
+    border-color: #665332;
+}
+
+html.dark body .room-list > .card .badge.Cleaning,
+html.dark body .badge.Cleaning,
+html.dark body .badge.cleaning {
+    background: #323630;
+    color: #d3d1b8;
+    border-color: #51594c;
+}
+
+html.dark body .room-list > .card .badge.Maintenance,
+html.dark body .badge.Maintenance,
+html.dark body .badge.maintenance {
+    background: #432a2a;
+    color: #edb2ab;
+    border-color: #644444;
+}
+
+html.dark body :is(.search,.top-actions .search,.filters .search,.filter),
+html.dark body :is(.value,.setting-row,.status-track,.secondary,.text-link,.empty-schedule),
+html.dark body .front-desk-page .filter {
+    background: #131e18;
+    background-color: #131e18;
+    border-color: #394c3e;
+    color: #e8e5d9;
+}
+
+html.dark body :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea),
+html.dark body :is(#reservationSearch,#reservationFilter,#feedback),
+html.dark body #roomModal .field :is(input,select,textarea),
+html.dark body .rooms-page .filters :is(input,select) {
+    background: #111b16;
+    border-color: #394c3e;
+    color: #f2efe5;
+}
+
+html.dark body input::placeholder,
+html.dark body textarea::placeholder {
+    color: #92a496;
+}
+
+html.dark body :is(input,select,textarea):focus {
+    border-color: #e1bc7b;
+}
+
+html.dark body :is(.stat-icon,.blue,.green,.purple,.orange,.guest-total,.arrival-count),
+html.dark body .schedule-item time {
+    background: #29372a;
+    border-color: #465742;
+    color: #e2c38c;
+}
+
+html.dark body .room-grid .room.available {
+    background: #1b362b;
+    border-color: #315945;
+}
+
+html.dark body .room-grid .room.occupied {
+    background: #3c3020;
+    border-color: #695036;
+}
+
+html.dark body .room-grid .room.reserved {
+    background: #263741;
+    border-color: #42616a;
+}
+
+html.dark body .room-grid .room.cleaning,
+html.dark body .room-grid .room.maintenance {
+    background: #30332d;
+    border-color: #4c5044;
+}
+
+html.dark body .room-grid .room small,
+html.dark body .room-grid .room em {
+    color: #dfd4b7;
+}
+
+html.dark body :is(.guest-panel,.panel) table th,
+html.dark body table th,
+html.dark body .guest-panel th {
+    background: #26372d;
+    border-color: #425648;
+    color: #d2dfd1;
+}
+
+html.dark body :is(.guest-panel,.panel) table td,
+html.dark body table td,
+html.dark body .guest-panel td {
+    background: #1b2922;
+    border-color: #35473c;
+    color: #e8ecdf;
+}
+
+html.dark body table td strong,
+html.dark body .guest-panel td strong {
+    color: #f3e9d6;
+}
+
+html.dark body :is(.guest-panel,.panel) tbody tr:hover td,
+html.dark body table tbody tr:hover td,
+html.dark body .guest-panel tbody tr:hover {
+    background: #2a3c30;
+}
+
+html.dark body :is(.schedule-item,.arrival,.status-row,.section-divider),
+html.dark body .room-list > .card .features span + span {
+    border-color: #35473c;
+}
+
+html.dark body .mini-panel .ring {
+    color: #f1e6cd;
+}
+
+html.dark body .status-track {
+    background: #111b16;
+}
+
+html.dark body .room-list > .card .btn.room-details-btn,
+html.dark body :is(.btn:not(.solid),.secondary,.filter,.text-link),
+html.dark body #roomModal .modal-actions .btn:not(.primary) {
+    background: #29382e;
+    border-color: #485b4a;
+    color: #f0e9da;
+}
+
+html.dark body .filter.active {
+    background: #4a3f2b;
+    border-color: #ae8c5e;
+    color: #ffe8c1;
+}
+
+html.dark body :is(.btn.solid,.primary,button.primary,a.primary,.submit-btn),
+html.dark body .room-list > .card .btn.solid {
+    background: #e5c48d;
+    border-color: #e9d2a8;
+    color: #14392e;
+}
+
+html.dark body :is(.btn.solid,.primary,button.primary,a.primary,.submit-btn):hover,
+html.dark body .room-list > .card .btn.solid:hover:not(:disabled) {
+    background: #f2d9b2;
+    color: #14392e;
+}
+
+html.dark body #roomModal .reservation-modal,
+html.dark body #roomModal .reservation-modal-content,
+html.dark body .modal,
+html.dark body .room-detail-card,
+html.dark body .room-detail-body {
+    background: #1b2922;
+    border-color: #41513f;
+    color: #f2efe5;
+}
+
+html.dark body #roomModal :is(.modal-heading,.modal-actions),
+html.dark body .room-detail-footer,
+html.dark body .room-detail-spec {
+    border-color: #35473c;
+}
+
+html.dark body #roomModal :is(.modal-heading h2,.reservation-form-section,.field>label,.close-modal),
+html.dark body .room-detail-card :is(h2,h3,strong,.room-detail-rate,.room-detail-spec strong),
+html.dark body .modal h2 {
+    color: #f3e9d6;
+}
+
+html.dark body #roomModal :is(.close-modal,.reservation-section-number),
+html.dark body .room-detail-close,
+html.dark body .room-detail-spec {
+    background: #29382e;
+    border-color: #455744;
+    color: #f0e9da;
+}
+
+html.dark body .room-detail-card :is(.room-detail-meta,.room-detail-spec small),
+html.dark body #roomModal .modal-heading .sub {
+    color: #b3c0b4;
+}
+
+html.dark body .settings-panel .setting-row,
+html.dark body .settings-panel .value,
+html.dark body .settings-panel #feedback {
+    background: #111b16;
+    border-color: #394c3e;
+    color: #f2efe5;
+}
+
+html.dark body .settings-panel :is(h2,.setting-row strong) {
+    color: #f3e9d6;
+}
+
+html.dark body .settings-status {
+    color: #a7d8b4;
+}
+
+html.dark body .container {
+    background: #1b2922;
+    border-color: #3b5040;
+}
+
+html.dark body #loginSection h1,
+html.dark body #signupSection h1,
+html.dark body .container label {
+    color: #f2e8d7;
+}
+
+html.dark body .container :is(.subtitle,.switch-text,.forgot) {
+    color: #b9c9bc;
+}
+
+html.dark body .container :is(.switch-link,.toggle-password) {
+    color: #e5c48d;
+}
+
+html.dark body .guest-head {
+    background: #1b2922;
+    border-bottom: 1px solid #35473c;
+}
+
+html.dark body .guest-head h2 {
+    color: #f3e9d6;
+}
+
+html.dark body .guest-head p {
+    color: #b1c0b4;
+}

@@ -19,10 +19,6 @@ document.querySelectorAll(".nav a[data-soon]").forEach(link => {
     });
 });
 
-document.getElementById("newReservation").addEventListener("click", () => {
-    showToast("Connect this button to your reservation form.");
-});
- 
 document.getElementById("viewRooms").addEventListener("click", () => {
     window.location.href = "rooms.html";
 });
@@ -80,7 +76,6 @@ async function loadRooms() {
         `;
             roomGrid.appendChild(roomCard);
         });
-        l;
     } catch (error) {
         console.error("Error loading rooms:", error);
     }

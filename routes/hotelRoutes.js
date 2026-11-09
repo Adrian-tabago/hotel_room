@@ -66,26 +66,130 @@ router.get("/rooms", async (req, res) => {
 
 
 
-function getRoomStatus(checkIn, checkOut) {
+//fixing this
+function getRoomStatus(checkIn, checkOut, room) {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
 
+    const todayDate = new Date(today);
+    todayDate.setHours(0, 0, 0, 0);
+
     checkInDate.setHours(0, 0, 0, 0);
     checkOutDate.setHours(0, 0, 0, 0);
 
-    if (today < checkInDate) {
+    if (room.status === "Available") {
+        return "Available";
+    }
+
+    if (todayDate < checkInDate) {
         return "Reserved";
     }
 
-    if (today >= checkInDate && today < checkOutDate) {
+    if (todayDate >= checkInDate && todayDate < checkOutDate) {
         return "Occupied";
     }
 
-    return "Cleaning";
+    if (!room.cleaningStartedAt) {
+        return "Cleaning";
+    }
+
+    const cleaningEnd = new Date(
+        new Date(room.cleaningStartedAt).getTime() + (1 * 60 * 1000)
+    );
+
+    if (today < cleaningEnd) {
+        return "Cleaning";
+    }
+
+    return "Available";
 }
+
+// fixing this
+async function updateRoomStatuses() {
+    try {
+        const rooms = await Room.find();
+        const guests = await Guest.find();
+
+        for (const room of rooms) {
+
+            if (room.status === "Maintenance") {
+                continue;
+            }
+
+            if (room.status === "Cleaning") {
+
+                if (!room.cleaningStartedAt) {
+                    room.cleaningStartedAt = new Date();
+                    await room.save();
+                    continue;
+                }
+
+                const cleaningEnd = new Date(
+                    new Date(room.cleaningStartedAt).getTime() + (1 * 60 * 1000)
+                );
+
+                if (new Date() >= cleaningEnd) {
+                    room.status = "Available";
+                    room.cleaningStartedAt = null;
+
+                    await room.save();
+
+                    console.log(`Room ${room.roomNumber} is now Available`);
+                }
+
+                continue;
+            }
+
+            const roomGuests = guests.filter(guest =>
+                String(guest.roomNumber) === String(room.roomNumber)
+            );
+
+            roomGuests.sort((a, b) =>
+                new Date(b.checkIn) - new Date(a.checkIn)
+            );
+
+            const guest = roomGuests[0];
+
+            if (!guest || !guest.checkIn || !guest.checkOut) {
+                continue;
+            }
+
+            const newStatus = getRoomStatus(
+                guest.checkIn,
+                guest.checkOut,
+                room
+            );
+
+            if (newStatus === "Cleaning" && !room.cleaningStartedAt) {
+                room.cleaningStartedAt = new Date();
+            }
+
+            if (newStatus !== room.status) {
+                room.status = newStatus;
+
+                console.log(
+                    `Room ${room.roomNumber} changed to ${newStatus}`
+                );
+            }
+
+            await room.save();
+        }
+
+    } catch (error) {
+        console.log("Room status error:", error);
+    }
+}
+
+
+
+updateRoomStatuses();
+
+setInterval(() => {
+    console.log("Checking room statuses...");
+    updateRoomStatuses();
+}, 50000);
 
 
 router.post("/rentroom", async (req, res) => {
@@ -167,6 +271,7 @@ router.get("/guest", async (req, res) => {
     try {
         const rent = await Guest.find();
 
+
         res.json(rent);
 
     } catch (error) {
@@ -178,7 +283,7 @@ router.get("/guest", async (req, res) => {
 });
 
 
-router.put("/updatestatus/:id", async (req, res) => {
+router.put("/checkout/:id", async (req, res) => {
     try {
         if (!req.session.userId) {
             return res.status(401).json({
@@ -186,48 +291,51 @@ router.put("/updatestatus/:id", async (req, res) => {
             });
         }
 
-        const user = await User.findById(req.session.userId);
+        const guest = await Guest.findOne({
+            _id: req.params.id,
+            owner: req.session.userId
+        });
 
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found"
+        if (!guest) {
+            return res.status(403).json({
+                message: "You cannot check out this guest"
             });
         }
 
-        const { status } = req.body;
+        const room = await Room.findOne({
+            roomNumber: guest.roomNumber
+        });
 
-        const update = await Room.findOneAndUpdate(
-            {
-                _id: req.params.id,
-                owner: user._id
-            },
-            {
-                status: status
-            },
-            {
-                new: true,
-                runValidators: true
-            }
-        );
-
-        if (!update) {
+        if (!room) {
             return res.status(404).json({
                 message: "Room not found"
             });
         }
 
+        if (room.status !== "Occupied") {
+            return res.status(400).json({
+                message: "Only occupied rooms can be checked out"
+            });
+        }
+
+       room.status = "Cleaning";
+        room.cleaningStartedAt = new Date();
+
+        await room.save();
+
+        await Guest.findByIdAndDelete(guest._id);
+
         res.json({
-            message: "Room status updated successfully",
-            room: update
+            message: "Guest checked out successfully"
         });
 
     } catch (error) {
         res.status(500).json({
-            message: "Failed to update room status",
-            error: error.message
+            message: "Checkout failed"
         });
     }
 });
+
 
 
 module.exports = router;

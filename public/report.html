@@ -3,158 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haven Hotel | Reports</title>
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="css/reservations.css">
-<style>.report-stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-}
+<title>Luxent Hotel | Reports</title>
+<link rel="stylesheet" href="css/report.css">
+    <link rel="stylesheet" href="css/dark.css">
+    <script src="js/theme.js"></script>
 
-.status-panel {
-    margin-top: 20px;
-}
 
-.status-list {
-    display: grid;
-    gap: 19px;
-    margin-top: 24px;
-}
 
-.status-row {
-    display: grid;
-    grid-template-columns: 110px minmax(0, 1fr) 34px;
-    align-items: center;
-    gap: 18px;
-}
 
-.status-name {
-    color: #40554f;
-    font-size: 11px;
-    font-weight: 700;
-}
+    
 
-.status-track {
-    height: 9px;
-    border-radius: 999px;
-    overflow: hidden;
-    background: #ebe7df;
-    box-shadow: inset 0 1px 2px rgba(13, 48, 40, 0.05);
-}
-
-.status-bar {
-    width: 0;
-    height: 100%;
-    border-radius: inherit;
-    transition: width 0.55s ease;
-}
-
-.status-value {
-    text-align: right;
-    color: var(--green-dark);
-    font: 700 14px var(--serif);
-}
-
-.status-bar.available {
-    background: linear-gradient(90deg, #4f8a6d, #6da487);
-}
-
-.status-bar.reserved {
-    background: linear-gradient(90deg, #b98d49, #d0aa6a);
-}
-
-.status-bar.occupied {
-    background: linear-gradient(90deg, #0f493b, #236652);
-}
-
-.status-bar.cleaning {
-    background: linear-gradient(90deg, #648f8c, #82a9a6);
-}
-
-.status-bar.maintenance {
-    background: linear-gradient(90deg, #955d57, #b2746d);
-}
-
-.status-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 14px;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(13, 48, 40, 0.07);
-    color: var(--muted);
-    font-size: 9px;
-}
-
-.status-legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.legend-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.legend-dot.available {
-    background: #5c9679;
-}
-
-.legend-dot.reserved {
-    background: #c39a58;
-}
-
-.legend-dot.occupied {
-    background: #185746;
-}
-
-.legend-dot.cleaning {
-    background: #739b98;
-}
-
-.legend-dot.maintenance {
-    background: #a66861;
-}
-
-.export-note {
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 9px;
-}
-
-@media (max-width: 1120px) {
-    .report-stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 620px) {
-    .report-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .status-row {
-        grid-template-columns: 80px minmax(0, 1fr) 28px;
-        gap: 10px;
-    }
-
-    .status-name {
-        font-size: 10px;
-    }
-}
-</style>
 </head>
-<body>
+<body class="report-page">
 <div class="app">
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-mark">H</div>
+            <div class="brand-mark">L</div>
             <div class="brand-copy">
-                <div class="brand-name">haven<span>hotel</span></div>
+                <div class="brand-name">Luxent<span> Hotel</span></div>
                 <div class="brand-sub">PROPERTY MANAGEMENT</div>
             </div>
         </div>
@@ -171,7 +37,7 @@
         <nav class="nav">
             <a href="checkin.html"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Check-in / Check-out</span></a>
             <a href="report.html" class="active"><i class="fa-solid fa-chart-column"></i><span>Reports</span></a>
-            <a href="#" data-soon="Settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
         </nav>
 
         <div class="help">
@@ -190,7 +56,7 @@
     <main class="main">
         <header class="topbar">
             <div class="breadcrumb">
-                <span>Haven Hotel</span>
+                <span>Luxent Hotel</span>
                 <span>/</span>
                 <strong><i class="fa-solid fa-chart-column"></i> Reports</strong>
             </div>
@@ -210,7 +76,7 @@
         <div class="content">
             <section class="page-head">
                 <div>
-                    <div class="eyebrow">PROPERTY INSIGHTS <span class="live">• HAVEN HOTEL</span></div>
+                    <div class="eyebrow">PROPERTY INSIGHTS <span class="live">• LUXENT HOTEL</span></div>
                     <h1>Reports</h1>
                     <p class="subtitle">Monitor room availability, occupancy, and the current operational status of the property.</p>
                     <div class="hero-chips" aria-label="Report highlights">
@@ -219,7 +85,7 @@
                     </div>
                 </div>
                 <button class="primary" type="button" onclick="exportCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
-                <div class="hero-media" role="img" aria-label="Luxury hotel interior"></div>
+                <div class="hero-media" role="img" aria-label="Luxury hotel lobby interior"></div>
             </section>
 
             <section class="stats report-stats">
@@ -358,37 +224,58 @@ function csvCell(value) {
     const text = String(value ?? "");
     return `"${text.replaceAll('"', '""')}"`;
 }
-
 async function exportCSV() {
     try {
         const response = await fetch("/rooms");
-        if(!response.ok) throw new Error("Unable to export room data");
+        const guest = await fetch("/guest");
+
+        if (!response.ok || !guest.ok) {
+            throw new Error("Unable to export data");
+        }
 
         const data = await response.json();
-        let csv = "Room Number,Room Type,Floor,Status,Feature,Guests,Rate\n";
+        const guests = await guest.json();
 
-        data.forEach(room => {
+        let csv = "Name,Contact,Email,Room Number,Room Type,Floor,Status,Feature,Guests,Rate\n";
+
+        guests.forEach(guest => {
+
+            const foundRoom = data.find(room =>
+                String(room.roomNumber) === String(guest.roomNumber)
+            );
+
             csv += [
-                room.roomNumber,
-                room.roomType,
-                room.floor,
-                room.status,
-                room.feature,
-                room.guests,
-                room.rate
+                guest.name,
+                guest.number,
+                guest.email,
+                guest.roomNumber,
+                guest.roomType,
+                foundRoom?.floor ?? "",
+                foundRoom?.status ?? "",
+                foundRoom?.feature ?? "",
+                foundRoom?.guests ?? "",
+                foundRoom?.rate ?? ""
             ].map(csvCell).join(",") + "\n";
         });
 
-        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+        const blob = new Blob(["\uFEFF" + csv], {
+            type: "text/csv;charset=utf-8"
+        });
+
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
+
         link.href = url;
         link.download = "report.csv";
+
         document.body.appendChild(link);
         link.click();
         link.remove();
+
         URL.revokeObjectURL(url);
-        showToast("Room report exported successfully.");
+
+        showToast("Guest report exported successfully.");
+
     } catch(error) {
         console.error(error);
         showToast("Could not export the CSV file.");

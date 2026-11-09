@@ -63,7 +63,11 @@ const roomSchema = new mongoose.Schema(
         rate: {
             type: Number,
             required: true
-        }
+        },
+        cleaningStartedAt: {
+            type: Date,
+            default: null
+    }
     },
     {
         timestamps: true

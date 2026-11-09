@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
 
+
 const authRoutes = require("./routes/authRoutes");
 const hotelRoutes = require("./routes/hotelRoutes");
 
@@ -23,6 +24,7 @@ app.use("/", hotelRoutes);
 async function startServer() {
     try {
         await mongoose.connect("mongodb://127.0.0.1:27017/hotel_user");
+
 
         console.log("Database is running");
 
